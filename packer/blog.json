@@ -1,0 +1,34 @@
+{
+  "variables": {
+    "name": "default",
+    "region": "eu-central-1",
+    "source_ami": "ami-60baaa0c",
+    "vpc_id": "",
+    "subnet_id": ""
+  },
+
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "ami_virtualization_type": "hvm",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "instance_type": "t2.small",
+      "ssh_username": "ubuntu",
+      "ami_name": "{{user `name`}}-blog-{{isotime \"20060102-150405\"}}",
+      "tags":  {
+        "Name": "{{user `name`}}-blog-{{isotime \"20060102-150405\"}}"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "chef-solo",
+      "cookbook_paths": ["berks-cookbooks"],
+      "run_list": "blog"
+    }
+  ]
+}
